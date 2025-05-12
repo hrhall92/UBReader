@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Utility Bill Analyzer</title>
   <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5.0.3/dist/tesseract.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js"></script>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -32,7 +33,7 @@
 </head>
 <body>
   <h1>Residential Utility Bill Analyzer</h1>
-  <input type="file" accept="image/*" onchange="handleFile(event)" />
+  <input type="file" accept="image/*,application/pdf" onchange="handleFile(event)" />
 
   <div id="results">
     <p><strong>Status:</strong> Waiting for upload…</p>
@@ -43,46 +44,4 @@
       const file = event.target.files[0];
       if (!file) return;
 
-      document.getElementById("results").innerHTML = "<p><strong>Status:</strong> Processing OCR…</p>";
-
-      const reader = new FileReader();
-      reader.onload = function () {
-        Tesseract.recognize(reader.result, 'eng')
-          .then(({ data: { text } }) => {
-            const result = extractData(text);
-            displayResult(result);
-          })
-          .catch(err => {
-            document.getElementById("results").innerHTML = "<p>Error reading file.</p>";
-            console.error(err);
-          });
-      };
-      reader.readAsDataURL(file);
-    }
-
-    function extractData(text) {
-      function find(re, fallback = "N/A") {
-        const match = text.match(re);
-        return match ? match[1].trim() : fallback;
-      }
-
-      return {
-        Utility: find(/Utility(?:\s*Name)?[:\-]?\s*(.+)/i),
-        Tariff: find(/Tariff[:\-]?\s*(.+)/i),
-        Avg_kwh_rate: find(/Average kWh Rate[:\-]?\s*\$?([\d.]+)/i),
-        Avg_fixed_mo_costs: find(/Fixed (Monthly )?Cost[:\-]?\s*\$?([\d.]+)/i, "N/A"),
-        Avg_monthly_bill: find(/Average Monthly Bill[:\-]?\s*\$?([\d.]+)/i),
-        Annual_consumption_kwh: find(/Annual Consumption(?: \(kWh\))?[:\-]?\s*([\d,]+)/i)
-      };
-    }
-
-    function displayResult(data) {
-      let html = "<h2>Extracted Info</h2>";
-      for (const [key, value] of Object.entries(data)) {
-        html += `<div class="field"><strong>${key.replaceAll("_", " ")}:</strong> ${value}</div>`;
-      }
-      document.getElementById("results").innerHTML = html;
-    }
-  </script>
-</body>
-</html>
+      document.getElementById("results").innerHTML = "<
