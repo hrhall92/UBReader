@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Utility Bill Analyzer</title>
+  <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5.0.3/dist/tesseract.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.4.120/pdf.min.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 2em;
+      background: #f8f8f8;
+    }
+    h1 {
+      color: #333;
+    }
+    #results {
+      margin-top: 1em;
+      background: white;
+      padding: 1em;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+    label, input {
+      display: block;
+      margin: 0.5em 0;
+    }
+    .field {
+      margin: 0.3em 0;
+    }
+  </style>
+</head>
+<body>
+  <h1>Residential Utility Bill Analyzer</h1>
+  <input type="file" accept="image/*,application/pdf" onchange="handleFile(event)" />
+
+  <div id="results">
+    <p><strong>Status:</strong> Waiting for upload…</p>
+  </div>
+
+  <script>
+    function handleFile(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      document.getElementById("results").innerHTML = "<
